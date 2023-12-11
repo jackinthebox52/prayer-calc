@@ -1,5 +1,6 @@
 import requests
 import math
+import argparse
 
 _supported_bones = {
     536: 'Dragon bones',
@@ -24,7 +25,9 @@ def compareBones(name):
             return b_id
     return nil # If no bone is found
 
-def experienceTillLevel(level):
+'''Takes in level 1-99 and returns the experience required to reach that level.
+    Formula taken from https://oldschool.runescape.wiki/w/Experience'''
+def experienceTilLevel(level):
     total = 0
     for i in range(1, level):
         total += math.floor(i + 300 * pow(2, i / 7.0))
@@ -40,6 +43,7 @@ def main():
             print(item)
     return
 
+'''Prints all supported bones.'''
 def printBones():
     print('Supported bones: ', end='')
     for index, b_name in enumerate(_supported_bones.values()):
@@ -48,6 +52,49 @@ def printBones():
         else:   print('.')
     return
 
+'''Prints the help message'''
+def printHelp():
+    print('''
+    Commands:
+    -h : Displays this message
+    -b : Displays supported bones
+    [bone] [level] : Calculates the number of bones needed to reach the given level
+
+    [bone] should not include the word 'bones' and is not case sensitive
+
+    Example Usage: /bin/bash prayercalc dragon 99 
+    ''')
+    return
 
 if __name__ == '__main__':
-    printBones()
+    
+
+    def parse_arguments():
+        parser = argparse.ArgumentParser(description='Prayer Calculator')
+        parser.add_argument('bone', type=str, help='The type of bone (e.g. dragon)')
+        parser.add_argument('level', type=int, help='The target level (1-99)')
+        return parser.parse_args()
+
+    def main():
+        args = parse_arguments()
+        bone = args.bone.lower()
+        level = args.level
+
+        if bone == '-h':
+            printHelp()
+        elif bone == '-b':
+            printBones()
+        else:
+            bone_id = compareBones(bone)
+            if bone_id is None:
+                print('Invalid bone type. Use -b to see supported bones.')
+            elif level < 1 or level > 99:
+                print('Invalid level. Level must be between 1 and 99.')
+            else:
+                # Calculate the number of bones needed
+                experience_needed = experienceTilLevel(level)
+                bones_needed = math.ceil(experience_needed / data[str(bone_id)]['high'])
+                print(f'Number of {bone} bones needed to reach level {level}: {bones_needed}')
+
+    if __name__ == '__main__':
+        main()
