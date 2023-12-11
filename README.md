@@ -1,5 +1,6 @@
 # OSRS Prayer Calculator, written in python.
 
+
 ## Usage
 
 This program is designed to be run from the command line with the bone type and target level as arguments. Here's how to use it:
