@@ -13,14 +13,14 @@ _supported_bones = {
     6729: ['Dagannoth bones', 437.5],
     22786: ['Hydra bones', 385],
     4834: ['Ourg bones', 490],
-    22124: ['Superior {dragon} bones', 525]
+    22124: ['Superior dragon bones', 525]
 }
 
 
 '''Takes in a string and returns the bone id if it is a supported bone, returns nil otherwise'''
 def compareBones(name):
     for b_id, b_name in _supported_bones.items():
-        b_name = b_name[0].lower().replace(' bones', '')
+        b_name = b_name[0].lower().replace(' dragon', '').replace(' bones', '')
         if b_name in name.lower():
             return b_id
     return None # If no bone is found
